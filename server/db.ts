@@ -12,6 +12,6 @@ export async function connectDB(): Promise<void> {
 
   } catch (error) {
     console.error("❌ MongoDB Atlas connection failed:", error);
-    process.exit(1);
+    process.exit(2);
   }
 }

@@ -1576,15 +1576,31 @@ if (process.env.NODE_ENV !== "production") {
 // STARTUP
 // -------------------------------------------------------------------------
 async function startServer() {
-  await connectDB();
-  console.log("✅ MongoDB Atlas connected. All collections ready.");
+  try {
+    console.log("=================================");
+    console.log("Starting Job Genie Server...");
+    console.log("NODE_ENV:", process.env.NODE_ENV);
+    console.log("PORT:", PORT);
+    console.log("MONGODB_URI exists:", !!process.env.MONGODB_URI);
+    console.log("JWT_SECRET exists:", !!process.env.JWT_SECRET);
+    console.log("GEMINI_API_KEY exists:", !!process.env.GEMINI_API_KEY);
+    console.log("=================================");
 
-  server.listen(PORT, "0.0.0.0", () => {
-    console.log(`[JOB GIENE API Server with MongoDB Atlas + JWT Auth] running on http://localhost:${PORT}`);
-  });
+    await connectDB();
+
+    console.log("✅ MongoDB Atlas connected. All collections ready.");
+
+    server.listen(PORT, "0.0.0.0", () => {
+      console.log(
+        `[JOB GIENE API Server with MongoDB Atlas + JWT Auth] running on port ${PORT}`
+      );
+    });
+
+  } catch (err) {
+    console.error("❌ Fatal startup error:");
+    console.error(err);
+    process.exit(1);
+  }
 }
 
-startServer().catch(err => {
-  console.error("Fatal startup error:", err);
-  process.exit(1);
-});
+startServer();
